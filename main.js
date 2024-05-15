@@ -1,34 +1,41 @@
 
-function tocaSom(idElementoAudio) {
-    document.querySelector(idElementoAudio).play();
+function tocaSom (seletorAudio) {
+    const elemento = document.querySelector(seletorAudio);
+
+    if (elemento && elemento.localName === 'audio') {
+        elemento.play();
+    }
+    else {
+        //alert('Elemento não encontrado');
+        console.log('Elemento não encontrado ou seletor inválido');
+    }
 }
 
+const listaDeTeclas = document.querySelectorAll('.tecla'); //Podemos observar a quantidade de classe tipo 'tecla'
+        // console.log(listaDeTeclas)
 
-const listaDeTeclas = document.querySelectorAll('.tecla');
+for(let contador = 0; contador < listaDeTeclas.length; contador++) {
 
-let contador = 0;
+    const tecla = listaDeTeclas[contador];  //[0-8] Para 9 instrumentos. O contador seleciona a Tecla subsequente a cada iteração
+    const instrumento = tecla.classList[1]; //[1] Segundo elemento retornado por .classList = classe 'tecla_id'
 
-// document.querySelector('.tecla_pom').onclick = tocaSomPom;
-
-// document.querySelector('.tecla_pom').addEventListener('click', tocaSomPom);
-
-
-
-
-while (contador < listaDeTeclas.length) {
-    const tecla = listaDeTeclas[contador];
-    const instrumento = tecla.classList[1];
-
-    // console.log(instrumento);
-
-    const idAudio = `#som_${instrumento}`;
-    //  console.log(idAudio);
+    const idAudio = `#som_${instrumento}`; //idAudio vai ser igual a id '#som_' + 'tecla_id' formando o id do instrumento da respectiva posição [n]
 
     tecla.onclick = function () {
-        tocaSom(idAudio);
+        tocaSom(idAudio); // Toca o audio do instrumento selecionado por 'idAudio' ao executar a ação de click no botão
     }
 
-    contador = contador + 1;
+    tecla.onkeydown = function (evento) {   //Navegação com 'TAB' do Teclado
 
-    // console.log(contador);
+        // console.log(evento);
+        if(evento.code === "Enter" || evento.code === "Space") {
+            tecla.classList.add('ativa');
+        }
+    }
+    
+    tecla.onkeyup = function () {
+            tecla.classList.remove('ativa');
+    }
+
+
 }
